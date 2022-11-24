@@ -1,0 +1,18 @@
+{
+    "name": "GetReady.RGN.SignIn.Apple.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a2d81a3c3696aab47ba8d4a8d3ec38eb"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

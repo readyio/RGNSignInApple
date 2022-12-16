@@ -29,7 +29,7 @@ public class IOSPostBuild
 
 
         // Copy entitlement file and link it to project (needed for APNS, apple sign-in etc.)
-        var entSourcePath = Application.dataPath + "/ReadyGamesNetwork/Resources/IOSEntitlement.entitlements";
+        var entSourcePath = Application.dataPath + "/../Packages/io.getready.rgn.signin.apple/ReadyGamesNetwork/Resources/IOSEntitlement.entitlements";
         var entFileName = Path.GetFileName(entSourcePath);
         var entDstPath = buildPath + "/" + mainTargetName + "/" + entFileName;
 

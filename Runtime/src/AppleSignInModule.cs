@@ -110,7 +110,7 @@ namespace RGN.Modules
 
             var identityToken = Encoding.UTF8.GetString(appleIdCredential.IdentityToken);
             var authorizationCode = Encoding.UTF8.GetString(appleIdCredential.AuthorizationCode);
-            var firebaseCredential = OAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
+            var firebaseCredential = rgnCore.readyMasterAuth.oAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
 
             rgnCore.auth.CurrentUser.LinkAndRetrieveDataWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task =>
             {
@@ -156,7 +156,7 @@ namespace RGN.Modules
                         return;
                     }
 
-                    rgnCore.LinkWithProviderAsync(taskAuth.Result).ContinueWithOnMainThread(taskLink =>
+                    rgnCore.LinkWithProviderAsync(false, taskAuth.Result).ContinueWithOnMainThread(taskLink =>
                     {
                         rgnCore.SetAuthCompletion(EnumLoginState.Success, EnumLoginError.Ok);
                     });
@@ -170,7 +170,7 @@ namespace RGN.Modules
 
             var identityToken = Encoding.UTF8.GetString(appleIdCredential.IdentityToken);
             var authorizationCode = Encoding.UTF8.GetString(appleIdCredential.AuthorizationCode);
-            var firebaseCredential = OAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
+            var firebaseCredential = rgnCore.readyMasterAuth.oAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
 
             rgnCore.auth.SignInWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task =>
             {

@@ -1,3 +1,16 @@
 {
-	"name": "GetReady.RGN.SignIn.Apple.Runtime"
+    "name": "GetReady.RGN.SignIn.Apple.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e2146bdc04d424169b039613a1b62bdf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

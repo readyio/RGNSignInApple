@@ -44,6 +44,12 @@ namespace RGN.Modules
             rgnCore.OnUpdate += appleAuthManager.Update;
 #endif
         }
+        public void Dispose()
+        {
+#if PLATFORM_IOS && !UNITY_EDITOR
+            rgnCore.OnUpdate -= appleAuthManager.Update;
+#endif
+        }
 
         public void OnSignInWithApple(bool isLink = false)
         {
@@ -110,9 +116,9 @@ namespace RGN.Modules
 
             var identityToken = Encoding.UTF8.GetString(appleIdCredential.IdentityToken);
             var authorizationCode = Encoding.UTF8.GetString(appleIdCredential.AuthorizationCode);
-            var firebaseCredential = rgnCore.readyMasterAuth.oAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
+            var firebaseCredential = rgnCore.ReadyMasterAuth.oAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
 
-            rgnCore.auth.CurrentUser.LinkAndRetrieveDataWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task =>
+            rgnCore.Auth.CurrentUser.LinkAndRetrieveDataWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task =>
             {
                 if (task.IsCanceled)
                 {
@@ -141,7 +147,7 @@ namespace RGN.Modules
 
                 Debug.Log("[AppleSignInModule]: LinkWith Apple Successful.");
                 
-                rgnCore.auth.CurrentUser.TokenAsync(false).ContinueWithOnMainThread(taskAuth =>
+                rgnCore.Auth.CurrentUser.TokenAsync(false).ContinueWithOnMainThread(taskAuth =>
                 {
                     if (taskAuth.IsCanceled)
                     {
@@ -170,9 +176,9 @@ namespace RGN.Modules
 
             var identityToken = Encoding.UTF8.GetString(appleIdCredential.IdentityToken);
             var authorizationCode = Encoding.UTF8.GetString(appleIdCredential.AuthorizationCode);
-            var firebaseCredential = rgnCore.readyMasterAuth.oAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
+            var firebaseCredential = rgnCore.ReadyMasterAuth.oAuthProvider.GetCredential("apple.com", identityToken, rawNonce, authorizationCode);
 
-            rgnCore.auth.SignInWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task =>
+            rgnCore.Auth.SignInWithCredentialAsync(firebaseCredential).ContinueWithOnMainThread(task =>
             {
                 Debug.LogFormat("[AppleSignInModule]: SignInWithCredentialAsync, isCanceled: {0}, isFaulted: {1}", task.IsCanceled, task.IsFaulted);
 
@@ -226,7 +232,7 @@ namespace RGN.Modules
 
                         Debug.Log("[AppleSignInModule]: Apple, masterToken " + taskCustom.Result);
                         
-                        rgnCore.readyMasterAuth.SignInWithCustomTokenAsync(taskCustom.Result);
+                        rgnCore.ReadyMasterAuth.SignInWithCustomTokenAsync(taskCustom.Result);
                     });
                 });
             });

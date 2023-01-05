@@ -69,7 +69,7 @@ namespace RGN.Modules
 
                     if (isLink)
                     {
-                        rgnCore.IsUserCanBeLinked(appleIdCredential.Email).ContinueWithOnMainThread(checkLinkResult =>
+                        rgnCore.IsUserCanBeLinkedAsync(appleIdCredential.Email).ContinueWithOnMainThread(checkLinkResult =>
                         {
                             if (checkLinkResult.IsCanceled)
                             {

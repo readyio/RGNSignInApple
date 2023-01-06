@@ -15,9 +15,9 @@ using AppleAuth.Interfaces;
 using AppleAuth.Native;
 #endif
 
-namespace RGN.Modules
+namespace RGN.Modules.SignIn
 {
-    public class AppleSignInModule : IRGNModule
+    public class AppleSignInModule : BaseModule<AppleSignInModule>, IRGNModule
     {
         private IRGNRolesCore rgnCore;
 

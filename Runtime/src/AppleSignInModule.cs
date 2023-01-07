@@ -73,12 +73,14 @@ namespace RGN.Modules.SignIn
                         {
                             if (checkLinkResult.IsCanceled)
                             {
+                                rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: IsUserCanBeLinkedAsync was cancelled");
                                 SignOutFromApple();
                                 return;
                             }
                     
                             if (checkLinkResult.IsFaulted)
                             {
+                                Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, checkLinkResult.Exception);
                                 SignOutFromApple();
                                 rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                                 return;
@@ -122,11 +124,13 @@ namespace RGN.Modules.SignIn
             {
                 if (task.IsCanceled)
                 {
+                    rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: LinkAndRetrieveDataWithCredentialAsync was cancelled");
                     return;
                 }
                 
                 if (task.IsFaulted)
                 {
+                    Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, task.Exception);
                     FirebaseAccountLinkException firebaseAccountLinkException = task.Exception.InnerException as FirebaseAccountLinkException;
                     if (firebaseAccountLinkException != null && firebaseAccountLinkException.ErrorCode == (int)AuthError.CredentialAlreadyInUse)
                     {
@@ -151,12 +155,14 @@ namespace RGN.Modules.SignIn
                 {
                     if (taskAuth.IsCanceled)
                     {
+                        rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: TokenAsync was cancelled");
                         SignOutFromApple();
                         return;
                     }
                     
                     if (taskAuth.IsFaulted)
                     {
+                        Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, taskAuth.Exception);
                         SignOutFromApple();
                         rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                         return;
@@ -184,12 +190,14 @@ namespace RGN.Modules.SignIn
 
                 if (task.IsCanceled)
                 {
+                    rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: SignInWithCredentialAsync was cancelled");
                     SignOutFromApple();
                     return;
                 }
                 
                 if (task.IsFaulted)
                 {
+                    Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, task.Exception);
                     rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                     return;
                 }
@@ -200,11 +208,13 @@ namespace RGN.Modules.SignIn
                 {
                     if (taskToken.IsCanceled)
                     {
+                        rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: TokenAsync was cancelled");
                         return;
                     }
                     
                     if (taskToken.IsFaulted)
                     {
+                        Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, taskToken.Exception);
                         rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                         return;
                     }
@@ -215,17 +225,20 @@ namespace RGN.Modules.SignIn
                     {
                         if (taskCustom.IsCanceled)
                         {
+                            rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: CreateCustomTokenAsync was cancelled");
                             return;
                         }
                         
                         if (taskCustom.IsFaulted)
                         {
+                            Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, taskCustom.Exception);
                             rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                             return;
                         }
                         
                         if (string.IsNullOrEmpty(taskCustom.Result))
                         {
+                            rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: CreateCustomTokenAsync result is null or empty");
                             rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                             return;
                         }

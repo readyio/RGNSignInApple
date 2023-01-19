@@ -51,7 +51,7 @@ namespace RGN.Modules.SignIn
 #endif
         }
 
-        public void OnSignInWithApple(bool isLink = false)
+        public void TryToSignIn(bool tryToLinkToCurrentAccount = false)
         {
 #if PLATFORM_IOS && !UNITY_EDITOR
             var rawNonce = NonceGenerator.GenerateRandomString(32);
@@ -67,17 +67,17 @@ namespace RGN.Modules.SignIn
                 {
                     Debug.Log($"[AppleSignInModule]: APPLE, login email {appleIdCredential.Email}");
 
-                    if (isLink)
+                    if (tryToLinkToCurrentAccount)
                     {
-                        rgnCore.IsUserCanBeLinkedAsync(appleIdCredential.Email).ContinueWithOnMainThread(checkLinkResult =>
+                        rgnCore.CanTheUserBeLinkedAsync(appleIdCredential.Email).ContinueWithOnMainThread(checkLinkResult =>
                         {
                             if (checkLinkResult.IsCanceled)
                             {
-                                rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: IsUserCanBeLinkedAsync was cancelled");
+                                rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: CanTheUserBeLinkedAsync was cancelled");
                                 SignOutFromApple();
                                 return;
                             }
-                    
+
                             if (checkLinkResult.IsFaulted)
                             {
                                 Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, checkLinkResult.Exception);
@@ -89,6 +89,7 @@ namespace RGN.Modules.SignIn
                             bool canBeLinked = (bool) checkLinkResult.Result.Data;
                             if (!canBeLinked)
                             {
+                                rgnCore.Dependencies.Logger.LogError("[AppleSignInModule]: The user can not be linked");
                                 SignOutFromApple();
                                 rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.AccountAlreadyLinked);
                                 return;
@@ -259,7 +260,7 @@ namespace RGN.Modules.SignIn
         }
 #endif
 
-        public void SignOutFromApple()
+        public void SignOut()
         {
             rgnCore.SignOutRGN();
         }

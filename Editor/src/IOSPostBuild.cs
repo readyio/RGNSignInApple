@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor.Callbacks;
-using UnityEditor;
 using System.IO;
+using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
+using UnityEngine;
 
 public class IOSPostBuild
 {
@@ -30,6 +28,22 @@ public class IOSPostBuild
 
         // Copy entitlement file and link it to project (needed for APNS, apple sign-in etc.)
         var entSourcePath = Application.dataPath + "/../Packages/io.getready.rgn.signin.apple/ReadyGamesNetwork/Resources/IOSEntitlement.entitlements";
+        if (!File.Exists(entSourcePath))
+        {
+            string targetDir = Application.dataPath + "/../Library/PackageCache/";
+            string[] files = Directory.GetFiles(targetDir, "IOSEntitlement.entitlements", SearchOption.AllDirectories);
+            if (files.Length == 0)
+            {
+                Debug.LogError("Can not find the IOSEntitlement.entitlements file in " + targetDir);
+                return;
+            }
+            string firstFile = files[0];
+            if (files.Length > 1)
+            {
+                Debug.LogError("Found more than one IOSEntitlement.entitlements files in Package folder. Using the first one: " + firstFile);
+            }
+            entSourcePath = firstFile;
+        }
         var entFileName = Path.GetFileName(entSourcePath);
         var entDstPath = buildPath + "/" + mainTargetName + "/" + entFileName;
 

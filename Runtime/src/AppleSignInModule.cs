@@ -41,13 +41,13 @@ namespace RGN.Modules.SignIn
                 appleAuthManager = new AppleAuthManager(deserializer);
             }
 
-            rgnCore.OnUpdate += appleAuthManager.Update;
+            rgnCore.UpdateEvent += appleAuthManager.Update;
 #endif
         }
         public void Dispose()
         {
 #if PLATFORM_IOS && !UNITY_EDITOR
-            rgnCore.OnUpdate -= appleAuthManager.Update;
+            rgnCore.UpdateEvent -= appleAuthManager.Update;
 #endif
         }
 
@@ -74,14 +74,14 @@ namespace RGN.Modules.SignIn
                             if (checkLinkResult.IsCanceled)
                             {
                                 rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: CanTheUserBeLinkedAsync was cancelled");
-                                SignOutFromApple();
+                                SignOut();
                                 return;
                             }
 
                             if (checkLinkResult.IsFaulted)
                             {
                                 Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, checkLinkResult.Exception);
-                                SignOutFromApple();
+                                SignOut();
                                 rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                                 return;
                             }
@@ -90,7 +90,7 @@ namespace RGN.Modules.SignIn
                             if (!canBeLinked)
                             {
                                 rgnCore.Dependencies.Logger.LogError("[AppleSignInModule]: The user can not be linked");
-                                SignOutFromApple();
+                                SignOut();
                                 rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.AccountAlreadyLinked);
                                 return;
                             }
@@ -164,14 +164,14 @@ namespace RGN.Modules.SignIn
                     if (taskAuth.IsCanceled)
                     {
                         rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: TokenAsync was cancelled");
-                        SignOutFromApple();
+                        SignOut();
                         return;
                     }
                     
                     if (taskAuth.IsFaulted)
                     {
                         Utility.ExceptionHelper.PrintToLog(rgnCore.Dependencies.Logger, taskAuth.Exception);
-                        SignOutFromApple();
+                        SignOut();
                         rgnCore.SetAuthCompletion(EnumLoginState.Error, EnumLoginError.Unknown);
                         return;
                     }
@@ -199,7 +199,7 @@ namespace RGN.Modules.SignIn
                 if (task.IsCanceled)
                 {
                     rgnCore.Dependencies.Logger.LogWarning("[AppleSignInModule]: SignInWithCredentialAsync was cancelled");
-                    SignOutFromApple();
+                    SignOut();
                     return;
                 }
                 

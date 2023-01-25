@@ -27,23 +27,22 @@ public class IOSPostBuild
 
 
         // Copy entitlement file and link it to project (needed for APNS, apple sign-in etc.)
-        var entSourcePath = Application.dataPath + "/../Packages/io.getready.rgn.signin.apple/ReadyGamesNetwork/Resources/IOSEntitlement.entitlements";
-        if (!File.Exists(entSourcePath))
+        string targetDir = Path.Combine(Application.dataPath, "../Library/PackageCache/");
+        string[] files = Directory.GetFiles(targetDir, "IOSEntitlement.entitlements", SearchOption.AllDirectories);
+        if (files.Length > 1)
         {
-            string targetDir = Application.dataPath + "/../Library/PackageCache/";
-            string[] files = Directory.GetFiles(targetDir, "IOSEntitlement.entitlements", SearchOption.AllDirectories);
-            if (files.Length == 0)
-            {
-                Debug.LogError("Can not find the IOSEntitlement.entitlements file in " + targetDir);
-                return;
-            }
-            string firstFile = files[0];
-            if (files.Length > 1)
-            {
-                Debug.LogError("Found more than one IOSEntitlement.entitlements files in Package folder. Using the first one: " + firstFile);
-            }
-            entSourcePath = firstFile;
+            Debug.LogError("Found more than one IOSEntitlement.entitlements files in Package folder. Using the first one");
         }
+        string entSourcePath = string.Empty;
+        if (files.Length == 1)
+        {
+            entSourcePath = files[0];
+        }
+        if (string.IsNullOrEmpty(entSourcePath))
+        {
+            entSourcePath = Path.Combine(Application.dataPath, "../Packages/io.getready.rgn.signin.apple/ReadyGamesNetwork/Resources/IOSEntitlement.entitlements");
+        }
+        Debug.Log("Entitlement file path: " + entSourcePath);
         var entFileName = Path.GetFileName(entSourcePath);
         var entDstPath = buildPath + "/" + mainTargetName + "/" + entFileName;
 

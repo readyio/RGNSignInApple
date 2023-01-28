@@ -27,7 +27,11 @@
     "/Editor",
     "/Editor.meta",
     "/Runtime",
-    "/Runtime.meta"
+    "/Runtime.meta",
+    "/Editor",
+    "/Editor.meta",
+    "/link.xml",
+    "/link.xml.meta"
   ],
   "dependencies": {
     "io.getready.rgn.core": "0.0.14"
